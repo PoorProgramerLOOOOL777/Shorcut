@@ -1,0 +1,12 @@
+{
+  "Title": "WinIsland",
+  "Subtitle": "Tu escritorio, tu estilo",
+  "Accent": "#8B7CFF",
+  "Background": "#08090D",
+  "TextColor": "#FFFFFF",
+  "ShowClock": true,
+  "ShowDate": true,
+  "ShowBattery": true,
+  "StartExpanded": false,
+  "WindowPosition": "TopCenter"
+}
