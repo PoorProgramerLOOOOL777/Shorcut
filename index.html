@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08090d">
+<title>WinIsland Mobile</title>
+
+<style>
+:root {
+  --accent: #947cff;
+  --bg: #08090d;
+  --panel: #171821;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 25px 16px;
+  background: radial-gradient(ellipse at top, #282344, #08090d 65%);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+
+header {
+  text-align: center;
+  margin: 30px 0 45px;
+}
+
+header h1 {
+  font-size: 32px;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+header p {
+  color: #9999aa;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 480px;
+  margin: auto;
+}
+
+/* DYNAMIC ISLAND */
+
+.stage {
+  display: flex;
+  justify-content: center;
+  min-height: 210px;
+  align-items: flex-start;
+}
+
+.island {
+  width: 185px;
+  min-height: 52px;
+  padding: 12px 15px;
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  background: #000;
+  border: 1px solid #30303b;
+  border-radius: 35px;
+  box-shadow: 0 12px 40px #0009;
+  overflow: hidden;
+  cursor: pointer;
+  transition: width .35s ease, min-height .35s ease,
+              border-radius .35s ease;
+}
+
+.island.expanded {
+  width: min(370px, 100%);
+  min-height: 175px;
+  border-radius: 27px;
+  align-items: flex-start;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--accent);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 13px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.clock {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.subtitle {
+  font-size: 11px;
+  color: #92929d;
+  margin-top: 3px;
+}
+
+.extra {
+  display: none;
+  margin-top: 17px;
+  animation: appear .3s ease;
+}
+
+.expanded .extra {
+  display: block;
+}
+
+.extra h3 {
+  font-size: 15px;
+  margin: 0 0 5px;
+}
+
+.extra p {
+  font-size: 12px;
+  color: #aaa;
+  margin: 5px 0;
+}
+
+@keyframes appear {
+  from {opacity: 0; transform: translateY(8px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* SETTINGS */
+
+.panel {
+  background: #ffffff09;
+  border: 1px solid #ffffff16;
+  padding: 20px;
+  border-radius: 22px;
+  margin-bottom: 18px;
+}
+
+.panel h2 {
+  font-size: 17px;
+  margin: 0 0 15px;
+}
+
+label {
+  display: block;
+  color: #aaa;
+  font-size: 13px;
+  margin: 15px 0 7px;
+}
+
+input, select {
+  width: 100%;
+  height: 43px;
+  padding: 8px 10px;
+  border: 1px solid #343442;
+  border-radius: 12px;
+  background: var(--panel);
+  color: white;
+}
+
+input[type=color] {
+  padding: 3px;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.secondary {
+  background: #292a36;
+}
+
+footer {
+  text-align: center;
+  color: #777;
+  font-size: 12px;
+  margin: 30px 0;
+}
+
+@media(max-width:380px) {
+  body { padding: 20px 12px; }
+  header h1 { font-size: 28px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+  <h1>WinIsland</h1>
+  <p>Tu interfaz. Tus reglas.</p>
+</header>
+
+<div class="stage">
+
+  <div class="island" id="island"
+       role="button" tabindex="0"
+       aria-expanded="false">
+
+    <div class="dot"></div>
+
+    <div class="content">
+
+      <div class="top">
+        <span class="title" id="islandTitle">WinIsland</span>
+        <span class="clock" id="clock">--:--</span>
+      </div>
+
+      <div class="subtitle" id="subtitle">
+        Toca para expandir
+      </div>
+
+      <div class="extra">
+        <h3 id="extraTitle">¡Bienvenido!</h3>
+        <p id="extraText">
+          Tu isla dinámica está preparada.
+        </p>
+        <p id="date"></p>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class="panel">
+
+  <h2>🎨 Personalización</h2>
+
+  <label>Nombre de la isla</label>
+  <input id="nameInput" value="WinIsland" maxlength="25">
+
+  <label>Texto secundario</label>
+  <input id="subtitleInput" value="Toca para expandir" maxlength="40">
+
+  <label>Color de acento</label>
+  <input id="accentInput" type="color" value="#947cff">
+
+  <label>Contenido</label>
+  <select id="modeInput">
+    <option value="welcome">Bienvenida</option>
+    <option value="creator">Modo creador</option>
+    <option value="focus">Modo concentración</option>
+    <option value="music">Modo multimedia</option>
+  </select>
+
+  <button id="applyButton">Aplicar cambios</button>
+  <button class="secondary" id="resetButton">Restablecer</button>
+
+</div>
+
+<footer>
+  WinIsland Mobile v1.0 · Created by Santiii
+</footer>
+
+</div>
+
+<script>
+const island = document.getElementById("island");
+
+const $ = id => document.getElementById(id);
+
+function updateClock() {
+  const now = new Date();
+
+  $("clock").textContent =
+    now.toLocaleTimeString("es-CO", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+  $("date").textContent =
+    now.toLocaleDateString("es-CO", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+}
+
+function toggleIsland() {
+  const expanded = island.classList.toggle("expanded");
+  island.setAttribute("aria-expanded", expanded);
+}
+
+island.addEventListener("click", toggleIsland);
+
+island.addEventListener("keydown", event => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    toggleIsland();
+  }
+});
+
+$("applyButton").addEventListener("click", () => {
+
+  document.documentElement.style.setProperty(
+    "--accent",
+    $("accentInput").value
+  );
+
+  $("islandTitle").textContent =
+    $("nameInput").value.trim() || "WinIsland";
+
+  $("subtitle").textContent =
+    $("subtitleInput").value;
+
+  const modes = {
+    welcome: [
+      "¡Bienvenido!",
+      "Tu isla dinámica está preparada."
+    ],
+    creator: [
+      "Modo creador 🎨",
+      "Tu espacio creativo está listo."
+    ],
+    focus: [
+      "Concentración activa",
+      "Es momento de enfocarse."
+    ],
+    music: [
+      "Modo multimedia",
+      "Panel multimedia de demostración."
+    ]
+  };
+
+  const selected = modes[$("modeInput").value];
+
+  $("extraTitle").textContent = selected[0];
+  $("extraText").textContent = selected[1];
+
+  alert("¡Personalización aplicada!");
+});
+
+$("resetButton").addEventListener("click", () => {
+  $("nameInput").value = "WinIsland";
+  $("subtitleInput").value = "Toca para expandir";
+  $("accentInput").value = "#947cff";
+  $("modeInput").value = "welcome";
+
+  $("applyButton").click();
+
+  island.classList.remove("expanded");
+  island.setAttribute("aria-expanded", "false");
+});
+
+updateClock();
+setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
